@@ -11,7 +11,6 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <Router />
-        <h1>Ola mundo</h1>
       </BrowserRouter>
     </ThemeProvider>
   )
