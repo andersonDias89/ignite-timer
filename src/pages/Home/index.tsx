@@ -26,7 +26,7 @@ export function Home() {
           <span className="number">0</span>
         </TimerContainer>
 
-        <button type="submit">
+        <button disabled type="submit">
           <Play weight="bold" size={20} />
           <span>Começar</span>
         </button>

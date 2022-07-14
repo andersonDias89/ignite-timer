@@ -10,8 +10,8 @@ export const HomeContainer = styled.div`
 
   button {
     width: 100%;
-    background-color: ${(props) => props.theme['green-500']};
-    color: ${(props) => props.theme['white-500']};
+    background: ${(props) => props.theme['green-500']};
+    color: ${(props) => props.theme['gray-100']};
     height: 3rem;
     outline: 0;
     border: none;
@@ -23,6 +23,15 @@ export const HomeContainer = styled.div`
     justify-content: center;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background: ${(props) => props.theme['green-700']};
+    }
 
     &:hover {
       background-color: ${(props) => props.theme['green-300']};
@@ -50,7 +59,7 @@ export const TimerContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   font-size: 10rem;
-  margin: 1rem 0;
+  margin: 2rem 0;
   font-weight: bold;
 
   .number {
