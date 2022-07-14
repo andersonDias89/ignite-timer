@@ -46,11 +46,26 @@ export const HomeContainer = styled.div`
 export const FormContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
-
+  justify-content: start;
   input {
     margin: 0 0.35rem;
   }
+`
+
+const InputBase = styled.input`
+  background: transparent;
+  padding: 0 0.5rem;
+  outline: none;
+  color: ${(props) => props.theme['gray-100']};
+  border-right: none;
+`
+
+export const InputNameTask = styled(InputBase)`
+  flex: 1;
+`
+
+export const InputMinutesAmount = styled(InputBase)`
+  width: 5rem;
 `
 
 export const TimerContainer = styled.div`
@@ -61,6 +76,7 @@ export const TimerContainer = styled.div`
   font-size: 10rem;
   margin: 2rem 0;
   font-weight: bold;
+  gap: 1rem;
 
   .number {
     padding: 0.5rem 1rem;
