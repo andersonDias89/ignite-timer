@@ -15,4 +15,22 @@ body {
 
     --webkit-font-smoothing: antialiased;
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 4px;
+  }
+  
+ 
+  ::-webkit-scrollbar-track {
+    background: ${(props) => props.theme['gray-700']};
+    border-radius: 5px;
+    
+  }
+  
+
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme['green-500']};
+    border-radius: 5px;
+  }
 `
