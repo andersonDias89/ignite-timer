@@ -37,7 +37,7 @@ export function Home() {
             min={0}
             name="duration"
             type="number"
-            {...register('duration', { required: true })}
+            {...register('duration', { valueAsNumber: true, required: true })}
           />
           <span>minutos.</span>
         </FormContainer>
