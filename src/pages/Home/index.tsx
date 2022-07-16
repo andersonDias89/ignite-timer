@@ -7,25 +7,37 @@ import {
   TimerContainer,
 } from './styles'
 
+import { useForm } from 'react-hook-form'
+
 export function Home() {
+  const { register, handleSubmit, watch } = useForm()
+
+  function handleSubmitTask(data) {
+    console.log(data)
+  }
+
+  const task = watch('task')
+  const duration = watch('duration')
+
   return (
     <HomeContainer>
-      <form>
+      <form onSubmit={handleSubmit(handleSubmitTask)}>
         <FormContainer>
-          <label htmlFor="projectName">Vou trabalhar em:</label>
+          <label htmlFor="task">Vou trabalhar em:</label>
           <InputNameTask
-            id="projectName"
             type="text"
+            name="task"
             placeholder="Dê um nome para o seu projeto"
+            {...register('task', { required: true })}
           />
 
           <label htmlFor="duration">Durante:</label>
           <InputMinutesAmount
-            step={5}
             max={60}
             min={0}
-            id="duration"
+            name="duration"
             type="number"
+            {...register('duration', { required: true })}
           />
           <span>minutos.</span>
         </FormContainer>
@@ -38,7 +50,7 @@ export function Home() {
           <span className="number">0</span>
         </TimerContainer>
 
-        <button disabled type="submit">
+        <button disabled={!task && !duration} type="submit">
           <Play weight="bold" size={20} />
           <span>Começar</span>
         </button>
