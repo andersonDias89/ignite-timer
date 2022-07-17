@@ -24,7 +24,7 @@ const newFormValitaded = zod.object({
 })
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm<FormData>({
+  const { register, handleSubmit, watch, reset } = useForm<FormData>({
     resolver: zodResolver(newFormValitaded),
     defaultValues: {
       task: '',
@@ -34,6 +34,7 @@ export function Home() {
 
   function handleSubmitTask(data: FormData) {
     console.log(data)
+    reset()
   }
 
   const task = watch('task')
