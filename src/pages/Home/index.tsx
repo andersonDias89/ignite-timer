@@ -1,6 +1,7 @@
 import { Play } from 'phosphor-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
+import { useForm } from 'react-hook-form'
 import {
   FormContainer,
   HomeContainer,
@@ -9,7 +10,10 @@ import {
   TimerContainer,
 } from './styles'
 
-import { useForm } from 'react-hook-form'
+interface FormData {
+  task: string
+  duration: number
+}
 
 const newFormValitaded = zod.object({
   task: zod.string().min(1, 'Esse campo é obrigatório'),
@@ -20,11 +24,15 @@ const newFormValitaded = zod.object({
 })
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm<FormData>({
     resolver: zodResolver(newFormValitaded),
+    defaultValues: {
+      task: '',
+      duration: 0,
+    },
   })
 
-  function handleSubmitTask(data) {
+  function handleSubmitTask(data: FormData) {
     console.log(data)
   }
 
