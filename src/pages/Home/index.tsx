@@ -1,4 +1,7 @@
 import { Play } from 'phosphor-react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+import { useForm } from 'react-hook-form'
 import {
   FormContainer,
   HomeContainer,
@@ -7,25 +10,55 @@ import {
   TimerContainer,
 } from './styles'
 
+interface FormData {
+  task: string
+  duration: number
+}
+
+const newFormValitaded = zod.object({
+  task: zod.string().min(1, 'Esse campo é obrigatório'),
+  duration: zod
+    .number()
+    .min(5, 'Esse campo requer no mínumo 5 minutos')
+    .max(60, 'Esse campo requer no máximo 60 minutos'),
+})
+
 export function Home() {
+  const { register, handleSubmit, watch, reset } = useForm<FormData>({
+    resolver: zodResolver(newFormValitaded),
+    defaultValues: {
+      task: '',
+      duration: 0,
+    },
+  })
+
+  function handleSubmitTask(data: FormData) {
+    console.log(data)
+    reset()
+  }
+
+  const task = watch('task')
+  const duration = watch('duration')
+
   return (
     <HomeContainer>
-      <form>
+      <form onSubmit={handleSubmit(handleSubmitTask)}>
         <FormContainer>
-          <label htmlFor="projectName">Vou trabalhar em:</label>
+          <label htmlFor="task">Vou trabalhar em:</label>
           <InputNameTask
-            id="projectName"
             type="text"
+            name="task"
             placeholder="Dê um nome para o seu projeto"
+            {...register('task', { required: true })}
           />
 
           <label htmlFor="duration">Durante:</label>
           <InputMinutesAmount
-            step={5}
             max={60}
             min={0}
-            id="duration"
+            name="duration"
             type="number"
+            {...register('duration', { valueAsNumber: true, required: true })}
           />
           <span>minutos.</span>
         </FormContainer>
@@ -38,7 +71,7 @@ export function Home() {
           <span className="number">0</span>
         </TimerContainer>
 
-        <button disabled type="submit">
+        <button disabled={!task && !duration} type="submit">
           <Play weight="bold" size={20} />
           <span>Começar</span>
         </button>
