@@ -1,4 +1,6 @@
 import { Play } from 'phosphor-react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
 import {
   FormContainer,
   HomeContainer,
@@ -9,8 +11,18 @@ import {
 
 import { useForm } from 'react-hook-form'
 
+const newFormValitaded = zod.object({
+  task: zod.string().min(1, 'Esse campo é obrigatório'),
+  duration: zod
+    .number()
+    .min(5, 'Esse campo requer no mínumo 5 minutos')
+    .max(60, 'Esse campo requer no máximo 60 minutos'),
+})
+
 export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch } = useForm({
+    resolver: zodResolver(newFormValitaded),
+  })
 
   function handleSubmitTask(data) {
     console.log(data)
