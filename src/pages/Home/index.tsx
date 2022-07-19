@@ -51,6 +51,7 @@ export function Home() {
     }
     setCycles((state) => [...state, newCycle])
     setIsActiveCycleId(id)
+    setAmountSecondsPassed(0)
 
     reset()
   }
@@ -72,14 +73,26 @@ export function Home() {
   const duration = watch('duration')
 
   useEffect(() => {
+    let interval: number
+
     if (activeCycle) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate),
         )
       })
     }
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [activeCycle])
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${activeCycle.task} - ${minutes}:${seconds}`
+    }
+  }, [minutes, seconds, activeCycle])
 
   return (
     <HomeContainer>
