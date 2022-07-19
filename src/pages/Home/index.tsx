@@ -2,6 +2,7 @@ import { Play } from 'phosphor-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { useForm } from 'react-hook-form'
+import { differenceInSeconds } from 'date-fns'
 import {
   FormContainer,
   HomeContainer,
@@ -9,12 +10,13 @@ import {
   InputNameTask,
   TimerContainer,
 } from './styles'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Cycle {
   id: string
   task: string
   duration: number
+  startDate: Date
 }
 
 const newFormValitaded = zod.object({
@@ -45,9 +47,11 @@ export function Home() {
       id,
       task: data.task,
       duration: data.duration,
+      startDate: new Date(),
     }
     setCycles((state) => [...state, newCycle])
     setIsActiveCycleId(id)
+    setAmountSecondsPassed(0)
 
     reset()
   }
@@ -67,6 +71,28 @@ export function Home() {
 
   const task = watch('task')
   const duration = watch('duration')
+
+  useEffect(() => {
+    let interval: number
+
+    if (activeCycle) {
+      interval = setInterval(() => {
+        setAmountSecondsPassed(
+          differenceInSeconds(new Date(), activeCycle.startDate),
+        )
+      })
+    }
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [activeCycle])
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${activeCycle.task} - ${minutes}:${seconds}`
+    }
+  }, [minutes, seconds, activeCycle])
 
   return (
     <HomeContainer>
