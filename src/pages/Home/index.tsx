@@ -9,8 +9,10 @@ import {
   InputNameTask,
   TimerContainer,
 } from './styles'
+import { useState } from 'react'
 
-interface FormData {
+interface Cycle {
+  id: string
   task: string
   duration: number
 }
@@ -24,7 +26,7 @@ const newFormValitaded = zod.object({
 })
 
 export function Home() {
-  const { register, handleSubmit, watch, reset } = useForm<FormData>({
+  const { register, handleSubmit, watch, reset } = useForm<Cycle>({
     resolver: zodResolver(newFormValitaded),
     defaultValues: {
       task: '',
@@ -32,10 +34,36 @@ export function Home() {
     },
   })
 
-  function handleSubmitTask(data: FormData) {
-    console.log(data)
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [isActiveCycleId, setIsActiveCycleId] = useState<String | null>(null)
+  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+
+  function handleSubmitTask(data: Cycle) {
+    const id = String(new Date().getTime())
+
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      duration: data.duration,
+    }
+    setCycles((state) => [...state, newCycle])
+    setIsActiveCycleId(id)
+
     reset()
   }
+
+  const activeCycle = cycles.find((cycle) => cycle.id === isActiveCycleId)
+
+  const totalSeconds = activeCycle ? activeCycle.duration * 60 : 0
+  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
+
+  const minutesAmount = Math.floor(currentSeconds / 60)
+  const secondsAmount = currentSeconds % 60
+
+  const minutes = String(minutesAmount).padStart(2, '0')
+  const seconds = String(secondsAmount).padStart(2, '0')
+
+  console.log(activeCycle)
 
   const task = watch('task')
   const duration = watch('duration')
@@ -64,11 +92,11 @@ export function Home() {
         </FormContainer>
 
         <TimerContainer>
-          <span className="number">0</span>
-          <span className="number">0</span>
+          <span className="number">{minutes[0]}</span>
+          <span className="number">{minutes[1]}</span>
           <span>:</span>
-          <span className="number">0</span>
-          <span className="number">0</span>
+          <span className="number">{seconds[0]}</span>
+          <span className="number">{seconds[1]}</span>
         </TimerContainer>
 
         <button disabled={!task && !duration} type="submit">
